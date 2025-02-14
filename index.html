@@ -14,7 +14,7 @@
 
         body {
             min-height: 100vh;
-            background-image: url('https://i.imgur.com/FmvHsmD.png');
+            background-image: url('FONDOOK.PNG'); /* Imagen de fondo */
             background-repeat: repeat; /* Hace que la imagen se repita */
             background-size: 515px; /* Mantiene el tamaño original de la imagen */
             background-position: center; /* Alinea la imagen en la parte superior izquierda */
@@ -41,13 +41,12 @@
         }
 
         .flower {
-    	   position: absolute;
-    	   top: 10rem; /* Cambié de 0.5rem a 1.5rem */
-    	   left: 50%;
-           transform: translateX(-50%);
-           animation: sway 4s ease-in-out infinite;
-           transform-origin: bottom center;
-
+            position: absolute;
+            top: 10rem; /* Cambié de 0.5rem a 1.5rem */
+            left: 50%;
+            transform: translateX(-50%);
+            animation: sway 4s ease-in-out infinite;
+            transform-origin: bottom center;
         }
 
         .head {
@@ -177,10 +176,10 @@
             transition: all 0.3s;
             margin-top: 22rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-	}
+        }
 
-	.message {
-	    text-align: center;
+        .message {
+            text-align: center;
             font-size: 1.5rem;
             font-weight: bold;
             color: white;
@@ -192,15 +191,13 @@
             transition: all 0.3s;
             margin-top: -30rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-	}	
-
-	.text:hover, .message:hover {
+        .text:hover, .message:hover {
             background-color: #db2777;
             transform: translateY(-2px);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
-        
-	}
+        }
 
         .button {
             margin-top: 3rem;
@@ -270,16 +267,15 @@
             ¿Quieres ser mi San Valentín? 🌻❤️
         </div>
 
-        <button class="button" onclick="window.open('/PLATAFORMA_FINAL.pdf', '_blank')">
+        <button class="button" onclick="window.location.href='Puzzle.html'">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                 <polyline points="7 10 12 15 17 10"/>
                 <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
-            Carta 📩
+            PUZZLE 📩
         </button>
 
-  <!-- Reproductor de audio -->
+        <!-- Reproductor de audio -->
         <div class="audio-container">
             <audio id="bg-music" loop>
                 <source src="Mi_Suerte.mp3" type="audio/mpeg">
@@ -288,15 +284,37 @@
         </div>
 
         <script>
+            const audio = document.getElementById('bg-music');
+
+            // Recuperar el estado y tiempo de reproducción del audio desde localStorage
+            window.addEventListener('load', () => {
+                const savedTime = localStorage.getItem('audioTime');
+                if (savedTime) {
+                    audio.currentTime = savedTime;
+                }
+                const audioState = localStorage.getItem('audioState');
+                if (audioState === 'playing') {
+                    audio.play().catch(error => console.log("Error al reproducir: ", error));
+                }
+            });
+
             document.addEventListener('click', function () {
-                var audio = document.getElementById('bg-music');
                 if (audio.paused) {
                     audio.volume = 0.5;
                     audio.play().catch(error => console.log("Error al reproducir: ", error));
+                    localStorage.setItem('audioState', 'playing');
+                } else {
+                    audio.pause();
+                    localStorage.setItem('audioState', 'paused');
                 }
             }, { once: true });
+
+            // Guardar el tiempo de reproducción cada segundo
+            audio.addEventListener('timeupdate', () => {
+                localStorage.setItem('audioTime', audio.currentTime);
+            });
         </script>
+
     </div>
 </body>
 </html>
-
