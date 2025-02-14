@@ -118,10 +118,13 @@
         Tu navegador no soporta el formato de audio.
     </audio>
 
+    <!-- Agrega el script para confeti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
     <script>
         const audio = document.getElementById('audio');
         const imageReference = document.getElementById('imageReference');
-
+        
         // Al cargar la página, intenta recuperar el tiempo guardado
         window.onload = () => {
             const savedTime = localStorage.getItem('audioTime');
@@ -162,6 +165,8 @@
             });
             
             let dragged;
+            let completed = 0;
+            
             document.querySelectorAll(".piece").forEach(piece => {
                 piece.addEventListener("dragstart", (e) => {
                     dragged = e.target;
@@ -174,8 +179,40 @@
                     let tempPos = dragged.style.backgroundPosition;
                     dragged.style.backgroundPosition = e.target.style.backgroundPosition;
                     e.target.style.backgroundPosition = tempPos;
+
+                    // Verifica si todas las piezas están en su lugar
+                    checkCompletion();
                 });
             });
+
+            function checkCompletion() {
+                completed = 0;
+                document.querySelectorAll(".piece").forEach(piece => {
+                    if (piece.style.backgroundPosition === `-${parseInt(piece.dataset.order % 4) * 109.95}px -${Math.floor(piece.dataset.order / 4) * 142.575}px`) {
+                        completed++;
+                    }
+                });
+
+                if (completed === 16) {
+                    // Si todas las piezas están en su lugar, dispara el confeti
+                    triggerConfetti();
+                }
+            }
+
+            function triggerConfetti() {
+                // Asegúrate de que el CDN de confeti está cargado y funcionando
+                if (typeof confetti !== 'undefined') {
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { x: 0.5, y: 0.5 },
+                        colors: ['#ff0', '#0f0', '#00f', '#f0f'],
+                        shapes: ['circle', 'square']
+                    });
+                } else {
+                    console.log('Error: Confetti library not loaded.');
+                }
+            }
         });
     </script>
 </body>
